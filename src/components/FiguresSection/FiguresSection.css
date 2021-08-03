@@ -3,7 +3,7 @@
     grid-column-end: 2;
     grid-row-start: 1;
     grid-row-end: 2;
-    background-color: #ccc;
+    background-color: #ffc53b;
     border: 1px solid #000;
     display: flex;
     justify-content: center;
@@ -16,6 +16,10 @@
     grid-column-end: 2;
     grid-row-start: 2;
     grid-row-end: 3;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: column;
     border: 1px solid #000;
     height: 100vh;
 }
