@@ -17,8 +17,15 @@ const Rect = styled.div`
   border: 3px solid #27480d `;
 
 const Figure = (props) => {
-    const {isRect} = props;
-    return (isRect ? <Rect/> : <Circle/>);
+    const {isRect, dragstart} = props;
+
+    return (
+        <div
+            onDragStart={dragstart}
+            draggable={true}
+            id={isRect ? 'rect' : 'circle'}>
+            {isRect ? <Rect /> : <Circle />}
+        </div>);
 };
 
 export default Figure;
