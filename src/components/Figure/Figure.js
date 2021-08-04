@@ -21,14 +21,16 @@ const Rect = styled.div`
 const Figure = (props) => {
     const {isRect, dragstart, dragend} = props;
 
-    return (
-        <div
-            onDragStart={dragstart}
-            onDragEnd={dragend}
-            draggable={true}
-            id={isRect ? 'rect' : 'circle'}>
-            {isRect ? <Rect/> : <Circle/>}
-        </div>);
+    return (isRect
+            ? <Rect onDragStart={dragstart}
+                    onDragEnd={dragend}
+                    draggable={true}
+                    id={isRect ? 'rect' : 'circle'}/>
+            : <Circle onDragStart={dragstart}
+                      onDragEnd={dragend}
+                      draggable={true}
+                      id={isRect ? 'rect' : 'circle'}/>
+    );
 };
 
 export default Figure;

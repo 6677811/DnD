@@ -1,5 +1,7 @@
 const initialState = {
     isDrag: false,
+    selectedFigure: null,
+    figures: [],
 };
 
 const reducer = (state = initialState, action) => {
@@ -8,6 +10,16 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 isDrag: action.payload,
+            };
+        case 'SELECTED_FIGURE':
+            return {
+                ...state,
+                selectedFigure: action.payload,
+            };
+        case 'ADD_FIGURE':
+            return {
+                ...state,
+                figures: action.payload,
             };
         default:
             return state;

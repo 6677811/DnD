@@ -1,57 +1,86 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './CanvasSection.css';
 import { bindActionCreators } from 'redux';
-import { setIsDrag } from '../../actions';
+import * as actions from '../../actions';
 import { connect } from 'react-redux';
 
-const removeActivesFigures = () => {
-    document
-        .querySelectorAll('.active-figure')
-        .forEach((figure) => {
-            figure.classList.remove('active-figure');
-        });
-}
-
-const setActiveFigure = (e) => {
-    e.stopPropagation();
-    removeActivesFigures();
-    e.target.classList.add('active-figure');
-}
-
-const CanvasSection = () => {
+const CanvasSection = ({isDrag, figures, selectedFigure, setIsDrag, selectFigure, setFigures}) => {
+    const [canvasData, setCanvasData] = useState(null);
+    useEffect(() => {
+        const canvas = document.querySelector('.canvas__workspace');
+        const {left, top} = canvas?.getBoundingClientRect();
+        setCanvasData({left, top})
+    }, [])
     const dragOverHandler = (e) => {
         e.preventDefault();
     };
+    const removeActivesFigures = () => {
+        figures.forEach((figure) => {
+            figure.className = figure.className.replace('active-figure', '').trim();
+        });
+        setFigures(figures);
+    }
+    const updateFigures = (id, className, left, top) => {
+        removeActivesFigures();
+        const updateFigure = {
+            id,
+            className: className.includes('active-figure') ? className : className.concat(' active-figure'),
+            left: left - 70 - canvasData.left,
+            top: top - 70 - canvasData.top,
+        };
+        const index = figures.findIndex((figure) => figure.id === id);
+        const newFigures = [
+            ...figures.slice(0, index),
+            updateFigure,
+            ...figures.slice(index + 1)
+        ];
+        setFigures(newFigures);
+        selectFigure(updateFigure);
+    };
+    const setActiveFigure = (e) => {
+        e.stopPropagation();
+        const {id, className} = e.target;
+        updateFigures(id, className, e.clientX, e.clientY);
+    }
     const dropHandler = (e) => {
+        e.stopPropagation();
         e.preventDefault();
+        setIsDrag(true);
         const data = e.dataTransfer.getData('id');
-        const canvas = document.querySelector('.canvas__workspace');
-        const {left, top} = canvas.getBoundingClientRect();
-
-        if (data && (data === 'circle' || data === 'rect')) {
-            const current = document.querySelector(`#${data}`);
-            const nodeCopy = current.cloneNode(true);
-            nodeCopy.addEventListener('dragstart', dragstartHandler);
-            nodeCopy.addEventListener('dragend', dragendHandler);
-            nodeCopy.addEventListener('mousedown', setActiveFigure);
-            nodeCopy.id = `added_${canvas.childElementCount}`;
+        if (data === 'circle' || data === 'rect') {
             removeActivesFigures();
-            nodeCopy.firstChild.classList.add('active-figure');
-            nodeCopy.style.left = e.clientX - left + 'px';
-            nodeCopy.style.top = e.clientY - top + 'px';
-            canvas.appendChild(nodeCopy);
+            const newFigure = document.querySelector(`#${data}`);
+            const id = `added_${figures.length}`;
+            const node = Object.defineProperties(Object.create(null), {
+                'id': {
+                    value: id,
+                    writable: true
+                },
+                'className': {
+                    value: newFigure.className.concat(' active-figure'),
+                    writable: true
+                },
+                'left': {
+                    value: e.clientX - 70 - canvasData.left,
+                    writable: true
+                },
+                'top': {
+                    value: e.clientY - 70 - canvasData.top,
+                    writable: true
+                },
+            });
+            setFigures([...figures, node]);
+            selectFigure(node);
         } else {
-            const id = e.dataTransfer.getData('id');
-            const current = document.getElementById(id);
-            current.style.left = e.clientX - left + 'px';
-            current.style.top = e.clientY - top + 'px';
+            const {id, className} = selectedFigure;
+            updateFigures(id, className, e.clientX, e.clientY);
         }
+        setIsDrag(false);
     };
     const dragstartHandler = (e) => {
         e.dataTransfer.effectAllowed = 'move';
         e.dataTransfer.dropEffect = 'move';
         e.dataTransfer.setData('id', e.target.id);
-        e.target.classList.add('active-figure');
     };
 
     const dragendHandler = (e) => {
@@ -65,14 +94,27 @@ const CanvasSection = () => {
             <article
                 onDrop={dropHandler}
                 onDragOver={dragOverHandler}
-                className={'canvas__workspace'}></article>
+                className={'canvas__workspace'}>
+                {figures.map(({id, className, left, top}) => {
+                    return (
+                        <div draggable={true}
+                             key={id}
+                             id={id}
+                             style={{left: left + 'px', top: top + 'px'}}
+                             className={className}
+                             onDragStart={dragstartHandler}
+                             onDragEnd={dragendHandler}
+                             onMouseDown={setActiveFigure}/>
+                    );
+                })}
+            </article>
         </section>);
 };
 
-const mapStateToProps = () => ({});
+const mapStateToProps = ({figures, selectedFigure, isDrag}) => ({figures, selectedFigure, isDrag});
 
 const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({setIsDrag}, dispatch);
+    return bindActionCreators(actions, dispatch);
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CanvasSection);

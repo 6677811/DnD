@@ -1,5 +1,7 @@
-import { setIsDrag } from './actions';
+import { setIsDrag, selectFigure, setFigures } from './actions';
 
 export {
     setIsDrag,
+    selectFigure,
+    setFigures,
 };
