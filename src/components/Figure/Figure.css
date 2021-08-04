@@ -2,3 +2,6 @@
     z-index: 2;
     border-width: 6px;
 }
+.canvas__workspace div div:before {
+    content: "\2022";
+}

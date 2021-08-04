@@ -8,24 +8,26 @@ const Circle = styled.div`
   border-radius: 50%;
   margin: 20px;
   background-color: tomato;
-  border: 3px solid #d7472d`;
+  border: 3px solid #d7472d;
+  box-sizing: border-box;`;
 const Rect = styled.div`
   width: 100px;
   height: 100px;
   margin: 20px;
   background-color: #3f7215;
-  border: 3px solid #27480d `;
-
+  border: 3px solid #27480d;
+  box-sizing: border-box;`;
 
 const Figure = (props) => {
-    const {isRect, dragstart} = props;
+    const {isRect, dragstart, dragend} = props;
 
     return (
         <div
             onDragStart={dragstart}
+            onDragEnd={dragend}
             draggable={true}
             id={isRect ? 'rect' : 'circle'}>
-            {isRect ? <Rect /> : <Circle />}
+            {isRect ? <Rect/> : <Circle/>}
         </div>);
 };
 

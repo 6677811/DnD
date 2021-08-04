@@ -23,4 +23,7 @@
 
 .canvas__workspace div {
     position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
