@@ -66,28 +66,14 @@ const CanvasSection = ({isDrag, figures, selectedFigure, setIsDrag, selectFigure
             removeActivesFigures();
             const newFigure = document.querySelector(`#${data}`);
             const id = `added_${figures.length}`;
-            const node = Object.defineProperties(Object.create(null), {
-                'id': {
-                    value: id,
-                    writable: true
-                },
-                'className': {
-                    value: newFigure.className.concat(' active-figure'),
-                    writable: true
-                },
-                'left': {
-                    value: e.clientX - 70 - canvasData.left,
-                    writable: true
-                },
-                'top': {
-                    value: e.clientY - 70 - canvasData.top,
-                    writable: true
-                },
-                'isShow': {
-                    value: true,
-                    writable: true
-                },
-            });
+            const node = {
+                id,
+                className: newFigure.className.concat(' active-figure'),
+                left: e.clientX - 70 - canvasData.left,
+                top: e.clientY - 70 - canvasData.top,
+                isShow: true
+            };
+            
             setFigures([...figures, node]);
             selectFigure(node);
         } else {
