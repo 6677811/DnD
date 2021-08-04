@@ -8,11 +8,21 @@ const CanvasSection = ({isDrag, figures, selectedFigure, setIsDrag, selectFigure
     const [canvasData, setCanvasData] = useState(null);
     useEffect(() => {
         const canvas = document.querySelector('.canvas__workspace');
-        const {left, top} = canvas?.getBoundingClientRect();
-        setCanvasData({left, top})
+        setCanvasData(canvas.getBoundingClientRect())
     }, [])
     const dragOverHandler = (e) => {
         e.preventDefault();
+    };
+    const mouseLeaveHandler = (e) => {
+        if (isDrag && selectedFigure) {
+            if (e.clientX > canvasData.right
+                || e.clientX < canvasData.left
+                || e.clientY < canvasData.top
+                || e.clientY > canvasData.bottom) {
+                const {id, className} = selectedFigure;
+                updateFigures(id, className, e.clientX, e.clientY, false);
+            }
+        }
     };
     const removeActivesFigures = () => {
         figures.forEach((figure) => {
@@ -20,13 +30,14 @@ const CanvasSection = ({isDrag, figures, selectedFigure, setIsDrag, selectFigure
         });
         setFigures(figures);
     }
-    const updateFigures = (id, className, left, top) => {
+    const updateFigures = (id, className, left, top, isShow) => {
         removeActivesFigures();
         const updateFigure = {
             id,
-            className: className.includes('active-figure') ? className : className.concat(' active-figure'),
+            className: className?.includes('active-figure') ? className : className?.concat(' active-figure'),
             left: left - 70 - canvasData.left,
             top: top - 70 - canvasData.top,
+            isShow,
         };
         const index = figures.findIndex((figure) => figure.id === id);
         const newFigures = [
@@ -37,15 +48,19 @@ const CanvasSection = ({isDrag, figures, selectedFigure, setIsDrag, selectFigure
         setFigures(newFigures);
         selectFigure(updateFigure);
     };
-    const setActiveFigure = (e) => {
+    const mouseDownFigure = (e) => {
         e.stopPropagation();
+        setIsDrag(true);
         const {id, className} = e.target;
-        updateFigures(id, className, e.clientX, e.clientY);
+        updateFigures(id, className, e.clientX, e.clientY, true);
+    }
+    const mouseUpFigure = (e) => {
+        e.stopPropagation();
+        console.log('test');
     }
     const dropHandler = (e) => {
         e.stopPropagation();
         e.preventDefault();
-        setIsDrag(true);
         const data = e.dataTransfer.getData('id');
         if (data === 'circle' || data === 'rect') {
             removeActivesFigures();
@@ -68,22 +83,34 @@ const CanvasSection = ({isDrag, figures, selectedFigure, setIsDrag, selectFigure
                     value: e.clientY - 70 - canvasData.top,
                     writable: true
                 },
+                'isShow': {
+                    value: true,
+                    writable: true
+                },
             });
             setFigures([...figures, node]);
             selectFigure(node);
         } else {
             const {id, className} = selectedFigure;
-            updateFigures(id, className, e.clientX, e.clientY);
+            updateFigures(id, className, e.clientX, e.clientY, true);
         }
-        setIsDrag(false);
     };
     const dragstartHandler = (e) => {
         e.dataTransfer.effectAllowed = 'move';
         e.dataTransfer.dropEffect = 'move';
         e.dataTransfer.setData('id', e.target.id);
     };
-
     const dragendHandler = (e) => {
+        if (!selectedFigure.isShow) {
+            const newFigures = figures
+                .filter((figure) => figure.id !== selectedFigure.id)
+                .map((figure, idx) => {
+                    figure.id = `added_${idx}`;
+                    return figure;
+                });
+            setFigures(newFigures);
+        }
+
         e.dataTransfer.clearData();
         setIsDrag(false);
     };
@@ -94,17 +121,20 @@ const CanvasSection = ({isDrag, figures, selectedFigure, setIsDrag, selectFigure
             <article
                 onDrop={dropHandler}
                 onDragOver={dragOverHandler}
+                onMouseLeave={mouseLeaveHandler}
+                onDragLeave={mouseLeaveHandler}
                 className={'canvas__workspace'}>
-                {figures.map(({id, className, left, top}) => {
+                {figures.map(({id, className, left, top, isShow}) => {
                     return (
                         <div draggable={true}
                              key={id}
                              id={id}
-                             style={{left: left + 'px', top: top + 'px'}}
+                             style={{left: left + 'px', top: top + 'px', display: `${isShow ? 'flex' : 'none'}`}}
                              className={className}
                              onDragStart={dragstartHandler}
                              onDragEnd={dragendHandler}
-                             onMouseDown={setActiveFigure}/>
+                             onMouseDown={mouseDownFigure}
+                             onMouseUp={mouseUpFigure}/>
                     );
                 })}
             </article>
