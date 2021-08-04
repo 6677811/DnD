@@ -1,0 +1,17 @@
+.menu {
+    grid-column: 2/4;
+    grid-row: 1/2;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.menu button {
+    background: transparent;
+    border-radius: 3px;
+    border: 2px solid palevioletred;
+    color: palevioletred;
+    margin: 0 1em;
+    padding: 0.25em 1em;
+    cursor: pointer;
+}
