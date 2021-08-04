@@ -1,25 +1,24 @@
+.figures {
+    grid-row: 2/4;
+    grid-column: 2/3;
+}
+
 .figures__header {
-    grid-column-start: 1;
-    grid-column-end: 2;
-    grid-row-start: 1;
-    grid-row-end: 2;
     background-color: #ffc53b;
     border: 1px solid #000;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
+    height: 50px;
 }
 
 .figures__workspace {
-    grid-column-start: 1;
-    grid-column-end: 2;
-    grid-row-start: 2;
-    grid-row-end: 3;
+    grid-row: 3/4;
+    grid-column: 2/3;
     display: flex;
     justify-content: flex-start;
     align-items: center;
     flex-direction: column;
     border: 1px solid #000;
-    height: 100vh;
+    height: 500px;
 }

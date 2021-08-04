@@ -1,13 +1,13 @@
+import React from 'react';
 import FigureSection from '../FiguresSection';
 import CanvasSection from '../CanvasSection';
-import './App.css';
 
 const App = () => {
   return (
-    <div className="app">
+    <React.Fragment>
       <FigureSection />
       <CanvasSection />
-    </div>
+    </React.Fragment>
   );
 }
 

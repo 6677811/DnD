@@ -1,23 +1,22 @@
+.canvas {
+    grid-row: 2/4;
+    grid-column: 3/4;
+}
+
 .canvas__header {
-    grid-column-start: 2;
-    grid-column-end: 3;
-    grid-row-start: 1;
-    grid-row-end: 2;
     background-color: #ffc53b;
     border: 1px solid #000;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
+    height: 50px;
 }
 
 .canvas__workspace {
-    grid-column-start: 2;
-    grid-column-end: 3;
-    grid-row-start: 2;
-    grid-row-end: 3;
+    grid-row: 3/4;
+    grid-column: 3/4;
     border: 1px solid #000;
-    height: 100vh;
+    height: 500px;
     position: relative;
 }
 
