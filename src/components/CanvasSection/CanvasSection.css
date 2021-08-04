@@ -21,6 +21,6 @@
     position: relative;
 }
 
-.added-element {
+.canvas__workspace div {
     position: absolute;
 }

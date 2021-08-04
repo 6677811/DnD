@@ -1,0 +1,4 @@
+.canvas__workspace div .active-figure {
+    z-index: 2;
+    border-width: 6px;
+}
