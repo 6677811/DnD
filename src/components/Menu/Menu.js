@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import './Menu.css';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';

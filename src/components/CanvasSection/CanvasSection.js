@@ -3,13 +3,50 @@ import './CanvasSection.css';
 import { bindActionCreators } from 'redux';
 import * as actions from '../../actions';
 import { connect } from 'react-redux';
+import Storage from '../../storage';
+import { useBeforeunload } from 'react-beforeunload';
 
 const CanvasSection = ({isDrag, figures, selectedFigure, setIsDrag, selectFigure, setFigures}) => {
     const [canvasData, setCanvasData] = useState(null);
     useEffect(() => {
         const canvas = document.querySelector('.canvas__workspace');
-        setCanvasData(canvas.getBoundingClientRect())
+        setCanvasData(canvas.getBoundingClientRect());
+        loadFromDB();
     }, [])
+    useBeforeunload(async (event) => {
+        saveToStorage();
+        event.preventDefault();
+    });
+    const loadFromDB = () => {
+        const req = Storage.openDB();
+
+        req.onsuccess = (event) => {
+            const db = event.target.result;
+            const transaction = db.transaction('figures', 'readwrite');
+            const allFigures = transaction.objectStore('figures');
+
+            const request = allFigures.openCursor();
+
+            const data = [];
+            request.onsuccess = () => {
+                const cursor = request.result;
+
+                if (cursor) {
+                    const { value } = cursor;
+
+                    data.push(value);
+                    cursor.continue();
+                } else {
+                    setFigures(data);
+                }
+                return cursor;
+            };
+        };
+
+        req.onerror = ({ target }) => {
+            console.log(`error opening database ${target.errorCode}`);
+        };
+    };
     const dragOverHandler = (e) => {
         e.preventDefault();
     };
@@ -48,6 +85,9 @@ const CanvasSection = ({isDrag, figures, selectedFigure, setIsDrag, selectFigure
         setFigures(newFigures);
         selectFigure(updateFigure);
     };
+    const saveToStorage = () => {
+        Storage.add(figures);
+    }
     const mouseDownFigure = (e) => {
         e.stopPropagation();
         setIsDrag(true);
@@ -73,7 +113,7 @@ const CanvasSection = ({isDrag, figures, selectedFigure, setIsDrag, selectFigure
                 top: e.clientY - 70 - canvasData.top,
                 isShow: true
             };
-            
+
             setFigures([...figures, node]);
             selectFigure(node);
         } else {
