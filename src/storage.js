@@ -30,25 +30,27 @@ export default class Storage {
                 'readwrite',
             );
             const table = transaction.objectStore('figures');
-            for (let i = 0; i < figures.length; i++) {
-                const request = table.get(figures[i].id);
-                request.onerror = (event) => {
-                    const requestAdd = table.add(figures[i]);
+            const clearReq = table.clear();
 
-                    requestAdd.onsuccess = () => {
-                        console.log(requestAdd.result);
-                        this.current = requestAdd.result;
-                    };
-                };
-                request.onsuccess = (event) => {
-                    const requestUpdate = table.put(figures[i], figures[i].id);
+            clearReq.onsuccess = () => {
+                for (let i = 0; i < figures.length; i++) {
+                    const request = table.get(figures[i].id);
+                    request.onerror = (event) => {
+                        const requestAdd = table.add(figures[i]);
 
-                    requestUpdate.onsuccess = () => {
-                        console.log(requestUpdate.result);
-                        this.current = requestUpdate.result;
+                        requestAdd.onsuccess = () => {
+                            this.current = requestAdd.result;
+                        };
                     };
-                };
-            }
+                    request.onsuccess = (event) => {
+                        const requestUpdate = table.put(figures[i], figures[i].id);
+
+                        requestUpdate.onsuccess = () => {
+                            this.current = requestUpdate.result;
+                        };
+                    };
+                }
+            };
         };
 
         req.onerror = (event) => {
@@ -56,25 +58,25 @@ export default class Storage {
         };
     }
 
-    // static update(figure) {
-    //     const req = this.openDB();
-    //
-    //     req.onsuccess = (event) => {
-    //         const db = event.target.result;
-    //         const transaction = db.transaction(
-    //             'figures',
-    //             'readwrite',
-    //         );
-    //         const table = transaction.objectStore('figures');
-    //         const request = table.put(figure, figure.id);
-    //
-    //         request.onsuccess = () => {
-    //             this.current = request.result;
-    //         };
-    //     };
-    //
-    //     req.onerror = (event) => {
-    //         console.log(`error opening database ${event.target.errorCode}`);
-    //     };
-    // }
+    static async load(setFigures) {
+        const req = this.openDB();
+
+        req.onsuccess = async (event) => {
+            const db = event.target.result;
+            const transaction = db.transaction('figures', 'readonly');
+            const allFigures = transaction.objectStore('figures');
+
+            const request = await allFigures.getAll();
+            request.onsuccess = () => {
+                if (request.result !== undefined) {
+                    setFigures(request.result);
+                    return request.result;
+                }
+            };
+        };
+
+        req.onerror = ({ target }) => {
+            console.log(`error opening database ${target.errorCode}`);
+        };
+    }
 }

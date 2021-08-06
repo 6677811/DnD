@@ -1,0 +1,18 @@
+export const figureTypes = {
+    CIRCLE: 'CIRCLE',
+    SQUARE: 'SQUARE',
+};
+
+export const figureActionTypes = {
+    CIRCLE_START: 'CIRCLE_TO_CANVAS_START',
+    SQUARE_START: 'SQUARE_TO_CANVAS_START',
+    CIRCLE_END: 'CIRCLE_TO_CANVAS_END',
+    SQUARE_END: 'SQUARE_TO_CANVAS_END',
+};
+
+export const canvasActionTypes = {
+    CIRCLE_START: 'CIRCLE_FROM_CANVAS_START',
+    SQUARE_START: 'SQUARE_FROM_CANVAS_START',
+    CIRCLE_END: 'CIRCLE_FROM_CANVAS_END',
+    SQUARE_END: 'SQUARE_FROM_CANVAS_END',
+};

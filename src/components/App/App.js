@@ -1,14 +1,12 @@
 import React from 'react';
-import FigureSection from '../FiguresSection';
-import CanvasSection from '../CanvasSection';
 import Menu from '../Menu';
+import Workspace from '../Workspace';
 
 const App = () => {
     return (
         <React.Fragment>
             <Menu/>
-            <FigureSection/>
-            <CanvasSection/>
+            <Workspace/>
         </React.Fragment>
     );
 }

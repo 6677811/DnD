@@ -1,11 +1,11 @@
 .figures {
-    grid-row: 2/4;
-    grid-column: 2/3;
+    border: 1px solid #000;
+    border-right: none;
+    flex-basis: 300px;
 }
 
 .figures__header {
     background-color: #ffc53b;
-    border: 1px solid #000;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -13,12 +13,9 @@
 }
 
 .figures__workspace {
-    grid-row: 3/4;
-    grid-column: 2/3;
     display: flex;
     justify-content: flex-start;
     align-items: center;
     flex-direction: column;
-    border: 1px solid #000;
     height: 500px;
 }

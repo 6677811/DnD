@@ -1,7 +1,8 @@
 const initialState = {
     isDrag: false,
-    selectedFigure: null,
     figures: [],
+    figureType: null,
+    mousePosition: {left: 0, top: 0},
 };
 
 const reducer = (state = initialState, action) => {
@@ -11,15 +12,20 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 isDrag: action.payload,
             };
-        case 'SELECTED_FIGURE':
-            return {
-                ...state,
-                selectedFigure: action.payload,
-            };
         case 'ADD_FIGURE':
             return {
                 ...state,
                 figures: action.payload,
+            };
+        case 'SET_TYPE':
+            return {
+                ...state,
+                figureType: action.payload,
+            };
+        case 'SET_MOUSE_POSITION':
+            return {
+                ...state,
+                mousePosition: action.payload,
             };
         default:
             return state;

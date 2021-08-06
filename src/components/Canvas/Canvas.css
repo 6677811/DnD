@@ -1,0 +1,14 @@
+.canvas__workspace {
+    grid-row: 3/4;
+    grid-column: 3/4;
+    border: none;
+    height: 500px;
+    position: relative;
+}
+
+.canvas__workspace div {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

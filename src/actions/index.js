@@ -1,7 +1,8 @@
-import { setIsDrag, selectFigure, setFigures } from './actions';
+import { setIsDrag, setFigures, setFigureType, setMousePosition } from './actions';
 
 export {
     setIsDrag,
-    selectFigure,
     setFigures,
+    setFigureType,
+    setMousePosition,
 };

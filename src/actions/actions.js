@@ -4,16 +4,21 @@ export const setIsDrag = (isDrag) => {
         payload: isDrag,
     };
 };
-export const selectFigure = (figure) => {
-    return {
-        type: 'SELECTED_FIGURE',
-        payload: figure,
-    };
-};
 export const setFigures = (figures) => {
     return {
         type: 'ADD_FIGURE',
         payload: figures,
     };
 };
-
+export const setFigureType = (type) => {
+    return {
+        type: 'SET_TYPE',
+        payload: type,
+    };
+};
+export const setMousePosition = (position) => {
+    return {
+        type: 'SET_MOUSE_POSITION',
+        payload: position,
+    };
+};

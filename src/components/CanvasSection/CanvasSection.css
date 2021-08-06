@@ -1,28 +1,11 @@
 .canvas {
-    grid-row: 2/4;
-    grid-column: 3/4;
+    border: 1px solid #000;
 }
 
 .canvas__header {
     background-color: #ffc53b;
-    border: 1px solid #000;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 50px;
-}
-
-.canvas__workspace {
-    grid-row: 3/4;
-    grid-column: 3/4;
-    border: 1px solid #000;
-    height: 500px;
-    position: relative;
-}
-
-.canvas__workspace div {
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
