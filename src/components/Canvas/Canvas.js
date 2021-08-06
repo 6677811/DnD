@@ -51,6 +51,8 @@ const Canvas = (_, canvasRef) => {
             const r = figures[i];
             if (i === figures.length - 1) {
                 r.border = 10;
+            } else {
+                r.border = 5;
             }
             ctx.fillStyle = r.fill;
             ctx.strokeStyle = r.stroke;

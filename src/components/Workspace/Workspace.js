@@ -38,7 +38,11 @@ const Workspace = ({
             && e.clientX < right
             && e.clientY > top
             && e.clientY < bottom) {
-            const newFigures = [...figures, {
+            let newFigures = figures.map(f => {
+                f.border = 5;
+                return f;
+            });
+            newFigures = [...newFigures, {
                 id: figures.length,
                 type: figureType,
                 x: e.clientX - left - (figureType === figureTypes.CIRCLE ? 0 : 50),
