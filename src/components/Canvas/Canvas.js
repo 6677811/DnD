@@ -117,6 +117,7 @@ const Canvas = (_, canvasRef) => {
                 if (!isShow) {
                     const current = figures[figures.length - 1];
                     dispatch(setFigures(figures.slice(0, -1)));
+                    Storage.add(figures.slice(0, -1));
                     dispatch(setFigureType(current.type));
                 }
 
